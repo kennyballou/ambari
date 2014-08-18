@@ -271,9 +271,10 @@ public class AlertDefinitionResourceProvider extends AbstractControllerResourceP
 
     for (Map<String, Object> requestPropMap : request.getProperties()) {
       for (Map<String, Object> propertyMap : getPropertyMaps(requestPropMap, predicate)) {
-        Long id = (Long) propertyMap.get(ALERT_DEF_ID);
+        String stringId = (String) propertyMap.get(ALERT_DEF_ID);
+        long id = Long.parseLong(stringId);
 
-        AlertDefinitionEntity entity = alertDefinitionDAO.findById(id.longValue());
+        AlertDefinitionEntity entity = alertDefinitionDAO.findById(id);
         if (null == entity) {
           continue;
         }
@@ -357,7 +358,8 @@ public class AlertDefinitionResourceProvider extends AbstractControllerResourceP
 
     String clusterName = null;
     for (final Resource resource : resources) {
-      definitionIds.add((Long) resource.getPropertyValue(ALERT_DEF_ID));
+      Long id = (Long) resource.getPropertyValue(ALERT_DEF_ID);
+      definitionIds.add(id);
 
       if (null == clusterName) {
         clusterName = (String) resource.getPropertyValue(ALERT_DEF_CLUSTER_NAME);
